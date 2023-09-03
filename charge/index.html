@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Midtrans API</title>
+</head>
+<body>
+  <script>
+    // Set your server key (Note: Server key for sandbox and production mode are different)
+    var server_key = 'SB-Mid-server-hC8sXhiRSr4EaCCbJZU4V5_B';
+    // Set true for production, set false for sandbox
+    var is_production = false;
+
+    var api_url = is_production ?
+      'https://app.midtrans.com/snap/v1/transactions' :
+      'https://app.sandbox.midtrans.com/snap/v1/transactions';
+
+    // Check if method is not HTTP POST, display 404
+    if (window.location.pathname !== '/charge') {
+      document.write("Wrong path, make sure it's '/charge'");
+    } else {
+      // Get the HTTP POST body of the request
+      var request_body = JSON.stringify({}); // Replace with your request body
+
+      // Call charge API using fetch
+      fetch(api_url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Basic ' + btoa(server_key + ':')
+        },
+        body: request_body
+      })
+        .then(function(response) {
+          // Set the response http status code
+          if (response.status === 404) {
+            document.write("Page not found or wrong HTTP request method is used");
+          } else {
+            // Parse and print out the response body as JSON
+            response.json().then(function(data) {
+              console.log(data);
+            });
+          }
+        });
+    }
+  </script>
+</body>
+</html>
